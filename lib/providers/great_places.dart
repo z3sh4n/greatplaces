@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:greatplaces/models/place.dart';
+
+import '/helpers/db_helper.dart';
+import '/models/place.dart';
 
 class GreatPlaces with ChangeNotifier {
   // ignore: prefer_final_fields
@@ -22,6 +24,24 @@ class GreatPlaces with ChangeNotifier {
       image: image,
     );
     _items.add(newPlace);
+    notifyListeners();
+    DBHelper.insert('user_places', {
+      'id': newPlace.id,
+      'title': newPlace.title,
+      'image': newPlace.image.path,
+    });
+  }
+
+  Future<void> fetchAndSetPlaces() async {
+    final dataList = await DBHelper.getData('user_places');
+    _items = dataList
+        .map((item) => Place(
+              id: item['id'],
+              image: File(item['image']),
+              title: item['title'],
+              location: null,
+            ))
+        .toList();
     notifyListeners();
   }
 }

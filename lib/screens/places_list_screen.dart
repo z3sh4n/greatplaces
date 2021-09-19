@@ -21,21 +21,30 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<GreatPlaces>(
-        child: const Center(
-          child: Text('Got no places yet, start adding some!'),
-        ),
-        builder: (ctx, greatplaces, ch) => greatplaces.items.isEmpty
-            ? ch!
-            : ListView.builder(
-                itemCount: greatplaces.items.length,
-                itemBuilder: (ctx, i) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: FileImage(greatplaces.items[i].image),
-                  ),
-                  title:Text(greatplaces.items[i].title),
-                  onTap: (){},
+      body: FutureBuilder(
+        future: Provider.of<GreatPlaces>(context, listen: false)
+            .fetchAndSetPlaces(),
+        builder: (ctx, snap) => snap.connectionState == ConnectionState.waiting
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer<GreatPlaces>(
+                child: const Center(
+                  child: Text('Got no places yet, start adding some!'),
                 ),
+                builder: (ctx, greatplaces, ch) => greatplaces.items.isEmpty
+                    ? ch!
+                    : ListView.builder(
+                        itemCount: greatplaces.items.length,
+                        itemBuilder: (ctx, i) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                FileImage(greatplaces.items[i].image),
+                          ),
+                          title: Text(greatplaces.items[i].title),
+                          onTap: () {},
+                        ),
+                      ),
               ),
       ),
     );

@@ -15,6 +15,7 @@ class AddPlacesScreen extends StatefulWidget {
 }
 
 class _AddPlacesScreenState extends State<AddPlacesScreen> {
+  final _titleController = TextEditingController();
   File? _pickedImage;
 
   void _selectImage(File pickedImage) {
@@ -22,15 +23,14 @@ class _AddPlacesScreenState extends State<AddPlacesScreen> {
   }
 
   void _savePlace() {
-    if (_titlecontroller!.text.isEmpty || _pickedImage == null) {
+    if (_titleController.text.isEmpty || _pickedImage == null) {
       return;
     }
     Provider.of<GreatPlaces>(context, listen: false)
-        .addPlace(_titlecontroller!.text, _pickedImage!);
+        .addPlace(_titleController.text, _pickedImage!);
     Navigator.of(context).pop();
   }
 
-  TextEditingController? _titlecontroller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +50,7 @@ class _AddPlacesScreenState extends State<AddPlacesScreen> {
                     decoration: const InputDecoration(
                       label: Text('Title'),
                     ),
-                    controller: _titlecontroller!,
+                    controller: _titleController,
                   ),
                   const SizedBox(height: 10),
                   ImageInput(_selectImage)
