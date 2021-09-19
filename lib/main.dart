@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greatplaces/screens/add_place_screen.dart';
 import 'package:greatplaces/screens/places_list_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: const PlacesListScreen(),
+        routes: {AddPlacesScreen.routeNamed: (ctx) => const AddPlacesScreen()},
       ),
     );
   }
